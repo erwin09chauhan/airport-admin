@@ -3,6 +3,7 @@ using System;
 using AirportAdmin.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AirportAdmin.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260605144603_AddShiftAssignmentAndUserJobRole")]
+    partial class AddShiftAssignmentAndUserJobRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,35 +24,6 @@ namespace AirportAdmin.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("AirportAdmin.API.Entities.ConstraintProfile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("MaxConsecutiveDays")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MaxHoursPerDay")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MaxHoursPerWeek")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ConstraintProfiles");
-                });
 
             modelBuilder.Entity("AirportAdmin.API.Entities.JobRole", b =>
                 {
@@ -269,9 +243,6 @@ namespace AirportAdmin.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ConstraintProfileId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -295,8 +266,6 @@ namespace AirportAdmin.API.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConstraintProfileId");
 
                     b.HasIndex("JobRoleId");
 
@@ -395,15 +364,9 @@ namespace AirportAdmin.API.Migrations
 
             modelBuilder.Entity("AirportAdmin.API.Entities.User", b =>
                 {
-                    b.HasOne("AirportAdmin.API.Entities.ConstraintProfile", "ConstraintProfile")
-                        .WithMany()
-                        .HasForeignKey("ConstraintProfileId");
-
                     b.HasOne("AirportAdmin.API.Entities.JobRole", "JobRole")
                         .WithMany()
                         .HasForeignKey("JobRoleId");
-
-                    b.Navigation("ConstraintProfile");
 
                     b.Navigation("JobRole");
                 });
